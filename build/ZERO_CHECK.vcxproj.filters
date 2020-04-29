@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Development\C++\hyperbanks-tcp\build\CMakeFiles\086c924b2753048406d869598622dee2\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0DD30E26-BD58-3D95-B2B9-314CC81091D2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
