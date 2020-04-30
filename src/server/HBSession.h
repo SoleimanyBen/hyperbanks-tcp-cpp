@@ -4,9 +4,11 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include "../enums/EPacketType.h"
 #include "../packets/HBPackets.h"
+#include "../packets/HBLoginPacket.h"
 
 #define MAX_BYTE_LENGTH 1024
 
@@ -40,11 +42,12 @@ public:
     template<class T>
     void SendPacket(T packet);
     
-    template<class T>
-    T DeserializePacket(EPacketType& type);
+    void DeserializePacket(EPacketType& type, size_t transferred_bytes);
 
     bool VerifyPacket(size_t packetLength);
     EPacketType GetPacketType();
+
+    void OnLogin(int transferred_bytes);
     
 private:
     boost::asio::ip::tcp::socket m_socket;

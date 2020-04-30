@@ -10,6 +10,12 @@
     <ClCompile Include="D:\Development\C++\hyperbanks-tcp\src\server\HBSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBLoginPacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBPackets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\server\HBServer.h">
@@ -19,6 +25,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\enums\EPacketType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBLoginPacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBPackets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

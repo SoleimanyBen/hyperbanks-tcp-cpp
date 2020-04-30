@@ -12,11 +12,10 @@ class HBServer
 {
 public:
     HBServer(boost::asio::io_service& ioService, int port);
-    ~HBServer();
+    // ~HBServer();
 
-    void StartAccepting(); // Method to start accepting connections
-    
-    void ListenForNewConnection();
+    void ListenForConnection(); // Method to start accepting connections
+
     void HandleConnection(boost::shared_ptr<HBSession> session, const boost::system::error_code& error);
     
 private:

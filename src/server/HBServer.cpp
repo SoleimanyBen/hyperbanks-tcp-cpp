@@ -2,17 +2,14 @@
 
 HBServer::HBServer(boost::asio::io_service& ioService, int port) : m_ioService(ioService), m_acceptor(ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) 
 { 
-	ListenForNewConnection();
+	std::cout << "[SERVER] Server started on port ::" << port << std::endl;
+	
+	ListenForConnection();
 }
 
-HBServer::~HBServer()
+void HBServer::ListenForConnection()
 {
-
-}
-
-void HBServer::ListenForNewConnection()
-{
-	std::shared_ptr<HBSession> session = std::make_shared<HBSession>(m_ioService);
+	boost::shared_ptr<HBSession> session = boost::make_shared<HBSession>(m_ioService);
 	m_acceptor.async_accept(
 		session->GetSocket(),
 		boost::bind(&HBServer::HandleConnection, this, session, boost::asio::placeholders::error)
@@ -23,9 +20,9 @@ void HBServer::HandleConnection(boost::shared_ptr<HBSession> session, const boos
 {
 	if (!error)
 	{
-		session->Start();
+		session->ListenForPacket();
 
-		ListenForNewConnection();
+		ListenForConnection();
 	} 
 	else 
 	{

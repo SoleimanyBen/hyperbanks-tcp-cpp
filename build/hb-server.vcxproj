@@ -319,6 +319,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Development\C++\hyperbanks-tcp\src\server\HBSession.cpp" />
     <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\server\HBSession.h" />
     <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\enums\EPacketType.h" />
+    <ClCompile Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBLoginPacket.cpp" />
+    <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBLoginPacket.h" />
+    <ClCompile Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBPackets.cpp" />
+    <ClInclude Include="D:\Development\C++\hyperbanks-tcp\src\packets\HBPackets.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Development\C++\hyperbanks-tcp\build\ZERO_CHECK.vcxproj">

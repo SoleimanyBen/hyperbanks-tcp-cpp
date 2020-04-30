@@ -1,6 +1,9 @@
 #ifndef HBPACKETS_HEADER
 #define HBPACKETS_HEADER
 
+#include <stdint.h>
+#include <iostream>
+
 class HBPackets
 {
 public:
@@ -18,6 +21,11 @@ public:
     uint8_t GetVersion();
     uint8_t GetCheckVersion();
     uint8_t GetToken();
+
+    template<class T>
+    void ParsePacket(const char buffer[], T& obj);
+
+    char* buffer;
 private:
     // p = packet
     uint16_t m_pLength;
@@ -25,8 +33,6 @@ private:
     uint8_t m_pVersion;
     uint8_t m_pCheckVersion;
     uint8_t m_pToken;
-
-    char* m_buffer;
 };
 
 #endif
