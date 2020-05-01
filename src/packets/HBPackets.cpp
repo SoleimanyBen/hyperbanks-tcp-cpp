@@ -1,47 +1,41 @@
 #include "HBPackets.h"
-#include <iostream>
 
 
-HBPackets::HBPackets(char** buffer)
+HBPackets::HBPackets(boost::shared_ptr<HBSession> session, char* buffer) : m_session(session)
 {
-    buffer = buffer;
-
-    DeserializeHeader();
-}
-
-void HBPackets::DeserializeHeader()
-{
-    m_pLength = buffer[0] + buffer[1];
-    m_pCommand = buffer[2];
-    m_pVersion = buffer[3];
-    m_pCheckVersion = buffer[4];
-    m_pToken = buffer[5];
-
-    DeserializePayload();
-}
-
-uint16_t HBPackets::GetLength()
-{
-    return m_pLength;
-}
-
-uint8_t HBPackets::GetCommand()
-{
-    return m_pCommand;
-}
-
-uint8_t HBPackets::GetVersion()
-{
-    return m_pVersion;
-}
-
-uint8_t HBPackets::GetCheckVersion()
-{
-    return m_pCheckVersion;
+    std::cout << "Current command number" << std::endl;
 }
 
 template<class T>
-void HBPackets::ParsePacket(const char packet[], T& obj)
+void HBPackets::SendResponsePacket(T& obj)
 {
-    size_t typeSize = sizeof(obj);
+    char* bytes = ParseStructToBytes<T>(obj);
+
+    m_session->SendPacket(bytes);
+}
+
+template<class T>
+void HBPackets::ParseBytesToStruct(T& obj, char* buffer)
+{
+    memcpy(&obj, &buffer[0], sizeof(T));
+}
+
+template<class T>
+char* HBPackets::ParseStructToBytes(T obj, size_t packetSize)
+{
+    return char* bytes = reinterpret_cast<char*>(obj);
+}
+
+std::string HBPackets::ParseStringFromBytes(char* bytes, size_t offset, size_t size)
+{
+    char* charString = new char[size];
+
+    for (int i = 0; i < size; i++)
+    {
+        charString[i] = bytes[offset + i];
+    }
+
+    std::string newString(charString);
+    
+    return newString;
 }

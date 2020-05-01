@@ -1,9 +1,9 @@
 ﻿#include "HBServer.h"
 
 HBServer::HBServer(boost::asio::io_service& ioService, int port) : m_ioService(ioService), m_acceptor(ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) 
-{ 
+{
 	std::cout << "[SERVER] Server started on port ::" << port << std::endl;
-	
+
 	ListenForConnection();
 }
 

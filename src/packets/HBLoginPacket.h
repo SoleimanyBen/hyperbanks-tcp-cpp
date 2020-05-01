@@ -13,26 +13,17 @@
 class HBLoginPacket : public HBPackets
 {
 public:
-    HBLoginPacket(char** buffer);
+    HBLoginPacket(boost::shared_ptr<HBSession> session, char* buffer);
 
-    void DeserializePayload();
-
-    uint32_t GetRand();
-    
-    uint16_t GetMagic();
-    uint16_t GetBoxIdLength();
-    uint16_t GetReqDataLength();
-
-    std::string GetBoxId();
-    std::string GetReqData();
+    struct LoginPacket : public HBPackets::PacketHeader
+    {
+        uint32_t m_pRand;
+        uint16_t m_pMagic;
+        uint16_t m_pBoxIdLen;
+        std::string m_pBoxId;
+    } loginPacket;
 
 private:
-    uint32_t m_pRand;
-    uint16_t m_pMagic;
-    uint16_t m_pBoxIdLen;
-    std::string m_pBoxId;
-    uint16_t m_pReqDataLen;
-    std::string m_pReqData;
 
     char* m_buffer;
 };

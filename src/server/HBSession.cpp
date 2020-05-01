@@ -15,10 +15,12 @@ void HBSession::ListenForPacket()
     );
 }
 
-template<class T>
-void HBSession::SendPacket(T packet)
+void HBSession::SendPacket(char* bytes)
 {
-    
+    m_socket.async_write_some(
+        bytes,
+        boost::bind(&HBSession::HandleWrite, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred)
+    );
 }
 
 void HBSession::DeserializePacket(EPacketType& type, size_t bytes_transferred)
@@ -33,41 +35,32 @@ void HBSession::DeserializePacket(EPacketType& type, size_t bytes_transferred)
 
 void HBSession::HandleRead(boost::shared_ptr<HBSession> session, const boost::system::error_code& error, size_t bytes_transferred)
 {
-    // std::cout << "[SESSION] Reading data from unit" << std::endl;
-    // LoginStruct loginPacket;
+    using ::boost::asio::detail::socket_ops::network_to_host_short;
+    using ::boost::asio::detail::socket_ops::network_to_host_long;
 
-    // std::stringstream stream;
-    // // 34 bytes total size
-    // loginPacket.packetLength = m_buffer[1]; // 2 byte
-    // loginPacket.cmd = m_buffer[2]; // 1 byte
-    // loginPacket.version = m_buffer[3]; // 1 byte 
-    // loginPacket.checkSum = m_buffer[4]; // 1 byte
-    // loginPacket.token = m_buffer[5], m_buffer[6], m_buffer[7], m_buffer[8]; // 4 bytes
-    // loginPacket.rand = m_buffer[9], m_buffer[10], m_buffer[11], m_buffer[12]; // 4 bytes
-    // loginPacket.magic = m_buffer[13], m_buffer[14]; // 2 bytes
-    // loginPacket.boxIdLength = m_buffer[16]; // 2 bytes
+    memcpy(&loginStruct, &m_buffer[0], sizeof(LoginStruct));
+
+    loginStruct.size = network_to_host_short(loginStruct.size);
+    loginStruct.token = network_to_host_long(loginStruct.token);
+    loginStruct.rand = network_to_host_long(loginStruct.rand);
+    loginStruct.magic = network_to_host_short(loginStruct.magic);
+
+    char* array = new char[loginStruct.boxIdLength];
+
+    for (int i = 0; i < loginStruct.boxIdLength; i++)
+    {
+        array[i] = m_buffer[17 + i];
+    };
+
+    std::string s(array);
     
-    // // 16 bytes
-    // stream << m_buffer[17];
-    // stream << m_buffer[18];
-    // stream << m_buffer[19];
-    // stream << m_buffer[20];
-    // stream << m_buffer[21];
-    // stream << m_buffer[22];
-    // stream << m_buffer[23];
-    // stream << m_buffer[24];
-    // stream << m_buffer[25];
-    // stream << m_buffer[26];
-    // stream << m_buffer[27];
-    // stream << m_buffer[28];
-    // stream << m_buffer[29];
-    // stream << m_buffer[30];
-    // stream << m_buffer[31];
-    // stream << m_buffer[32];
+    loginStruct.boxId = s;
 
-    // loginPacket.boxId = stream.str();
-    // loginPacket.reqDataLen = m_buffer[33], m_buffer[34]; // 2 bytes
-    // loginPacket.reqData; 
+    char* newStruct = reinterpret_cast<char*>(&loginStruct);
+
+    std::cout << "HEX DUMP OF STRUCTURE" << std::endl;
+    hexdump(newStruct, sizeof(LoginStruct));
+
 
     if (!error)
     {
@@ -121,15 +114,15 @@ EPacketType HBSession::GetPacketType()
 
 void HBSession::OnLogin(int transferred_bytes)
 {
-    char* newChar = new char[transferred_bytes];
+    // std::stringstream stream;
     
-    for (int i = 0; i < transferred_bytes; i++)
-    {
-        newChar[i] = m_buffer[i];
-    }
-    // memcpy(newChar, m_buffer, transferred_bytes);
+    // for (int i = 0; i < transferred_bytes; i++)
+    // {
+    //     stream << m_buffer[i];
+    // }
+    // // memcpy(newChar, m_buffer, transferred_bytes);
 
-    HBLoginPacket packet(newChar);
+    // HBLoginPacket packet(stream.str());
 
-    std::cout << packet.GetBoxId() << std::endl;
+    // std::cout << packet.GetBoxId() << std::endl;
 }

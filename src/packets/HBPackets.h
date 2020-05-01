@@ -3,36 +3,43 @@
 
 #include <stdint.h>
 #include <iostream>
+#include <boost/asio.hpp>
+#include <boost/make_shared.hpp>
+#include "../server/HBSession.h"
+
+#pragma pack(1)
 
 class HBPackets
 {
 public:
-    HBPackets(char buffer[]);
-    // ~HBPackets();
+    HBPackets(boost::shared_ptr<HBSession> session, char* buffer);
 
-    void DeserializeHeader();
-    void Serialize();
-
-    // Pure virutal function, needs to be defined by derived class.
-    virtual void DeserializePayload() = 0;
-
-    uint16_t GetLength();
-    uint8_t GetCommand();
-    uint8_t GetVersion();
-    uint8_t GetCheckVersion();
-    uint8_t GetToken();
+    void ResponsePacket();
 
     template<class T>
-    void ParsePacket(const char buffer[], T& obj);
+    void SendResponsePacket(T& obj);
 
-    char* buffer;
+    template<class T>
+    void ParseBytesToStruct(T& obj, char* buffer);
+
+    template<class T>
+    char* ParseStructToBytes(T obj, size_t packetSize);
+
+    std::string ParseStringFromBytes(char* bytes, size_t offset, size_t size);
+
+    struct PacketHeader
+    {
+        uint16_t m_pLength;
+        uint8_t m_pCommand;
+        uint8_t m_pVersion;
+        uint8_t m_pCheckSum;
+        uint8_t m_pToken;
+    };
+
 private:
     // p = packet
-    uint16_t m_pLength;
-    uint8_t m_pCommand;
-    uint8_t m_pVersion;
-    uint8_t m_pCheckVersion;
-    uint8_t m_pToken;
+    boost::shared_ptr<HBSession> m_session;
+
 };
 
 #endif
